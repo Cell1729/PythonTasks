@@ -6,6 +6,7 @@
 今回はタイマーを作ってみよう。
 
 ### 要件
+
 - start、stop、resetの機能を持ったタイマーを作成する。
 - startでタイマーがスタートし、stopでタイマーがストップする。
 - resetでタイマーがリセットされる。
@@ -14,7 +15,8 @@
 - エラーハンドリングを行う。
 
 ### 使用外部ライブラリ
-- [customtkinter](https://customtkinter.tomschimansky.com/) 
+
+- [customtkinter](https://customtkinter.tomschimansky.com/)
 
 ### ヒント
 
@@ -34,29 +36,42 @@ class TimeFrame(ctk.CTkFrame):
     """
 
     def __init__(self, master, **kwargs):
+        """
+        時間を表示するフレームの初期化
+        """
         pass
 
     def update_time(self, elapsed_seconds):
         """
         時間を更新する（小数点以下2桁表示に対応）
+        時間を計算するロジックを追加する
         """
         pass
 
 class StartButton(ctk.CTkButton):
+    """
+    タイマーをスタートするボタン
+    """
     def __init__(self, master, timer_frame, stop_button, **kwargs):
+        """
+        スタートボタンを初期化
+        """
         pass
 
     def start_timer(self):
         pass
 
     def update_timer(self):
+        """
+        時間の表示を更新する処理を追加
+        """
         # ストップボタンが押されていたら終了
         pass
 
 
 class StopButton(ctk.CTkButton):
     """
-    タイマーをストップするボタン。
+    タイマーをストップするボタン
     """
     BUTTON_TEXT = 'Stop'
 
@@ -76,7 +91,6 @@ class ResetButton(ctk.CTkButton):
     """
     タイマーをリセットするボタン
     """
-
     def __init__(self, master, timer_frame, start_button, stop_button, **kwargs):
         """
         Args:
@@ -89,7 +103,7 @@ class ResetButton(ctk.CTkButton):
 
     def reset_timer(self):
         """
-        タイマーをリセットします。
+        タイマーをリセットするロジックをここに追加
         """
         pass
 
