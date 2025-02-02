@@ -293,7 +293,7 @@ class PrimeNumber:
         pass
 ```
 
-## task 4
+## Task 4
 
 天気予報アプリを作ろう
 
