@@ -30,7 +30,7 @@ else:
     # 素数の判定をする処理
 ```
 
-#### 1-2-2, 考え方
+#### 1-2-2, ポイント
 
 - 素数の特徴を考えよう
 
@@ -201,7 +201,14 @@ if __name__ == '__main__':
 - 時間の表示を何秒毎に更新すればよいか
 - タイマーの状態をどのように管理すればよいか
 
-## 3 素数判定のGUIアプリケーションを作ろう
+### 2-4, Extra課題
+
+- 今回作ったプログラムはタイマーをストップして再度スタートを押してもタイマーは進まない。そのため再度スタートを押したら再度タイマーが動くように修正しよう
+- ラップ機能を追加しよう
+
+## Task 3
+
+素数判定GUIソフトを作ろう
 
 ## 3-1, 要件
 
@@ -215,7 +222,7 @@ if __name__ == '__main__':
 
 ## 3-3, ヒント
 
-### 3-3-1, 考え方
+### 3-3-1, ポイント
 
 - どのようなUIにする？
 - 必要なオブジェクトは？
@@ -280,6 +287,60 @@ class PrimeNumber:
         素数判定を行うメソッド
         """
         
-        # 前まではprint(判定)で良かったけど今回はどうすればいい？
+        # 前まではprint(判定)で良かったけど今回はどうすればいいユーザーが分かる？
         pass
 ```
+
+## task 4
+
+天気予報アプリを作ろう
+
+### 4-1, 要件
+
+- エリアコードを入力してボタンを押したら天気情報を表示しよう
+- APIについて知ろう
+- jsonファイルについて知ろう
+
+### 4-2, 使用ライブラリ
+
+- [customtkinter](https://customtkinter.tomschimansky.com/)
+- [天気の取得](https://qiita.com/Tatsuki_Yo/items/121afaecad59a7e11c61)
+
+### 4-3, ヒント
+
+### 4-3-1, ポイント
+
+- 天気予報の取得はどうやるのか、サンプルコードで確認をしよう
+
+サンプルコード
+
+```python
+import requests
+from datetime import datetime
+import json
+
+AREA_CODE = 140000 # 神奈川県のエリアコード
+
+# 気象庁データの取得
+jma_url = f"https://www.jma.go.jp/bosai/forecast/data/forecast/{AREA_CODE}.json"
+jma_json = requests.get(jma_url).json()
+
+# 取得したいデータを選ぶ
+jma_date = jma_json[0]["timeSeries"][0]["timeDefines"][0]
+jma_weather = jma_json[0]["timeSeries"][0]["areas"][0]["weathers"][0]
+# 全角スペースの削除
+jma_weather = jma_weather.replace('　', '')
+
+print(jma_date)
+print(jma_weather)
+```
+
+- UIを考えよう
+- 取得する地域はコードで管理されているから、管理(変更)しやすいように書いてみよう
+
+### 4-3-2, コード一部分
+
+### 4-4, Extra課題
+
+- 取得した情報によって持ち物を提案するような機能を追加
+- Jsonファイルを使って地域で検索できるようにしよう
