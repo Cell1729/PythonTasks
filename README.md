@@ -34,6 +34,21 @@ else:
 
 - 素数の特徴を考えよう
 
+### 1-3, 解説
+
+try - exceptの構文
+構文
+
+```python
+try:
+    # エラーが起こりそうな構文
+except エラー as e:
+    # eはエラー名を検出する変数
+    # エラーが起きたときの処理
+```
+
+エラーハンドリングを行う構文。実際に開発をする際にはエラーが発生したときにプログラム本体だけでエラーから復帰できるようにする必要がある。実際に利用されている場面としてファイルの読み書き、通信処理を行うetcがある。
+
 ## Task 2
 
 オブジェクト指向を学ぼう。
@@ -185,3 +200,86 @@ if __name__ == '__main__':
 - 時間の計測方法は「今の時間-開始時刻」で求める。
 - 時間の表示を何秒毎に更新すればよいか
 - タイマーの状態をどのように管理すればよいか
+
+## 3 素数判定のGUIアプリケーションを作ろう
+
+## 3-1, 要件
+
+- 素数を入力して判定するGUIアプリを作ろう
+- エラーハンドリングをしよう
+- オブジェクト指向を理解しよう
+
+## 3-2, 使用ライブラリ
+
+- [customtkinter](https://customtkinter.tomschimansky.com/)
+
+## 3-3, ヒント
+
+### 3-3-1, 考え方
+
+- どのようなUIにする？
+- 必要なオブジェクトは？
+- 想定されるエラーは？
+
+### 3-3-2, コード一部分
+
+```python
+# app.py
+import customtkinter as ctk
+import widget
+
+class App(ctk.CTk):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.widget = widget.Widget(self)
+        self.widget.pack()
+        self.title("素数判定")
+
+if __name__ == "__main__":
+    app = App()
+    app.mainloop()
+```
+
+```python
+# widget.py
+import customtkinter as ctk
+import primeNumber
+
+FONT_TYPE = ('Arial', 12)
+
+class Widget(ctk.CTkFrame):
+    def __init__(self, master=None, **kwwargs):
+        super().__init__(master, **kwwargs)
+        
+self.create_widgets()
+        self.prime_checker = primeNumber.PrimeNumber
+    def create_widgets(self):
+        # ウィジェットを作成/配置する
+        # ボタンのcallback用のメソッドを作成する。
+        # どこでエラーが発生する？
+        pass
+```
+
+```python
+# primeNumber.py
+# 素数判定を行うためのclassを作成
+# 練習としてカプセル化を意識して作成
+
+class PrimeNumber:
+    """
+    素数の判定を行う
+    """
+    def __init__(self):
+        # カプセル化する
+        # 最初に初期化しておくべき変数は？
+        # 受け取る引数は？
+        pass
+
+    def is_prime(self):
+        """
+        素数判定を行うメソッド
+        """
+        
+        # 前まではprint(判定)で良かったけど今回はどうすればいい？
+        pass
+```
