@@ -4,9 +4,9 @@ import weather
 
 FONT_TYPE = ('Arial', 12)
 
-class Widget(ctk.CTkFrame):
-    def __init__(self, master=None, **kwwargs):
-        super().__init__(master, **kwwargs)
+class WeatherWidget(ctk.CTkFrame):
+    def __init__(self, master=None, **kwargs):
+        super().__init__(master, **kwargs)
         self.create_widgets()
 
     def create_widgets(self):
@@ -20,21 +20,6 @@ class Widget(ctk.CTkFrame):
                                     command=self.update_result)
         self.button.grid(row=0, column=2, padx=10, pady=10)
 
-    def update_result(self):
-        try:
-            city = self.entry.get()
-            weather_checker = weather.Weather(city)
-            result = weather_checker.get_weather()
-            self.result.configure(text=result)
-        except ValueError:
-            self.result.configure(text="都市名を入力してください")
-
-class WeatherWidget(ctk.CTkFrame):
-    def __init__(self, master=None, **kwwargs):
-        super().__init__(master, **kwwargs)
-        self.create_widgets()
-
-    def create_widgets(self):
         self.result_date = ctk.CTkLabel(self, text="", font=FONT_TYPE)
         self.result_date.grid(row=1, column=0, columnspan=3, padx=10, pady=10)
 
@@ -49,11 +34,11 @@ class WeatherWidget(ctk.CTkFrame):
 
         self.result_wave = ctk.CTkLabel(self, text="", font=FONT_TYPE)
         self.result_wave.grid(row=5, column=0, columnspan=3, padx=10, pady=10)
-    
+
     def update_result(self):
         try:
-            city = self.entry.get()
-            weather_checker = weather.Weather(city)
+            city_code = self.entry.get()
+            weather_checker = weather.Weather(city_code)
             result = weather_checker.get_weather()
             self.result_date.configure(text=f"日付: {result['date']}")
             self.result_location.configure(text=f"場所: {result['location']}")

@@ -1,5 +1,7 @@
 # Python Tasks
 
+教えているときの題材用
+
 ## Task 1
 
 for文、if文、Flagの考え方、アルゴリズムの復習では「素数判定プログラム」を作ろう
@@ -311,8 +313,12 @@ class PrimeNumber:
 ### 4-3-1, ポイント
 
 - 天気予報の取得はどうやるのか、サンプルコードで確認をしよう
+- UIを考えよう
 
 サンプルコード
+
+[エリアコード](https://www.jma.go.jp/bosai/common/const/area.json)
+[コンテンツの種別](https://www.jma.go.jp/bosai/common/const/contents.json)
 
 ```python
 import requests
@@ -335,10 +341,66 @@ print(jma_date)
 print(jma_weather)
 ```
 
-- UIを考えよう
-- 取得する地域はコードで管理されているから、管理(変更)しやすいように書いてみよう
-
 ### 4-3-2, コード一部分
+
+```python
+#app.py
+import customtkinter as ctk
+import widget
+
+class App(ctk.CTk):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.weather_widget = widget.WeatherWidget(self)
+        self.weather_widget.pack()
+        self.title("天気予報")
+
+if __name__ == "__main__":
+    app = App()
+    app.mainloop()
+```
+
+```python
+# widget.py
+import customtkinter as ctk
+import weather
+
+FONT_TYPE = ('Arial', 12)
+
+class WeatherWidget(ctk.CTkFrame):
+    def __init__(self, master=None, **kwargs):
+        super().__init__(master, **kwargs)
+        self.create_widgets()
+
+    def create_widgets(self):
+        """
+        ウィジェットの作成
+        """
+        pass
+
+    def update_result(self):
+        """
+        結果を更新する処理を追加
+        """
+```
+
+```python
+# weather.py
+import requests
+
+class Weather:
+    """
+    天気予報を取得する処理を追加
+    """
+    # 取得したデータは下記の形でまとめよう
+    result = {
+            "date": 
+            "location": ,
+            "weather": ,
+            "winds": ,
+            "waves": 
+        }
+```
 
 ### 4-4, Extra課題
 

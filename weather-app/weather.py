@@ -16,7 +16,3 @@ class Weather:
             "waves": jma_json[0]["timeSeries"][0]["areas"][0]["waves"][0].replace('　', '')
         }
         return result
-
-if __name__ == "__main__":
-    weather_checker = Weather(140000)
-    print(weather_checker.get_weather())
