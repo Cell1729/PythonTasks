@@ -410,3 +410,45 @@ class Weather:
 
 - 取得した情報によって持ち物を提案するような機能を追加
 - Jsonファイルを使って地域で検索できるようにしよう
+
+## Task 5
+
+黒ひげ危機一髪を作ろう
+
+## 5-1, 要件
+
+- [customtkinter](https://customtkinter.tomschimansky.com/)を使って簡易的な黒ひげ危機一髪を作る
+- リセットボタンを配置してはずれの位置をリセットする
+- 画面のはずれを引いたときの演出を作成
+
+## 5-2, 使用ライブラリ
+
+- [customtkinter](https://customtkinter.tomschimansky.com/)
+- Pillow
+
+## 5-3, ヒント
+
+### 5-3-1, ポイント
+
+- UIの配置を決める
+- リセット機構を決める
+- ボタンをどのように管理するか
+
+### 5-3-2, コード一部分
+
+ボタンをIDで管理する方法
+
+```python
+    def create_widgets(self):
+        self.main_label = ctk.CTkLabel(self, text='Main Frame', font=FONT_TYPE)
+        self.main_label.grid(row=0, column=0, padx=10, pady=10)
+        
+        self.buttons = {}
+        for i in range(20):
+            button = ctk.CTkButton(self, text=f'Button {i}', command=lambda i=i: self.on_button_click(i))
+            button.grid(row=(i // 5) + 1, column=i % 5, padx=5, pady=5)
+            self.buttons[i] = button
+```
+
+実行結果
+![sample button](images\KURHIGE-Button.png)
