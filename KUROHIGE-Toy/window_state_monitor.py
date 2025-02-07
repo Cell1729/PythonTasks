@@ -17,10 +17,12 @@ class WindowStateMonitor:
         真偽値はreset_trigerの値
         """
         col, row = button_id
-        if self.matrix[col][row-1]:
+        # ここが可笑しい
+        if self.matrix[col-1][row]:
             print(f"button id :{col} , {row} is danger")
             self.change_image()
         else:
+            print(f"matrix[{col-1}][{row}] is {self.matrix[col-1][row]}")
             print(f"button id :{col} , {row} is safe")
             self.buttons[button_id].configure(state="disabled")
 

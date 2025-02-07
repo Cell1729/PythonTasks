@@ -40,7 +40,7 @@ class MainFrameWidget(ctk.CTkFrame):
         for i in range(3):
             if i != 1:
                 for j in range(10):
-                    button = ctk.CTkButton(self, text=f'Button{j} - {i}', command=lambda row=j, col=i: self.on_button_click((row, col)), font=FONT_TYPE)
+                    button = ctk.CTkButton(self, text=f'Button{j} - {i}', command=lambda col=j, row=i: self.on_button_click((col, row)), font=FONT_TYPE)
                     button.grid(row=j, column=i+1, padx=20, pady=10)
                     self.buttons[(j,i)] = button
 
