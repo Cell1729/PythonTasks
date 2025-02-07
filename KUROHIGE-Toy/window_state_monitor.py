@@ -21,7 +21,7 @@ class WindowStateMonitor:
             self.buttons[button_id].configure(state="disabled")
 
     def change_image(self):
-        new_image = ctk.CTkImage(light_image=Image.open(r'KUROHIGE-Toy\images\out.png'))
+        new_image = ctk.CTkImage(light_image=Image.open(r'KUROHIGE-Toy/images/out.png'), size=(200, 200))
         self.image_label.configure(image=new_image)
         self.image_label.image = new_image  # 参照を保持するため
 
