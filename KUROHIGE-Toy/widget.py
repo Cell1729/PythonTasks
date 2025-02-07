@@ -16,11 +16,11 @@ class ResetFrameWidget(ctk.CTkFrame):
         self.title_label = ctk.CTkLabel(self, text='KUROHIGE Toy', font=FONT_TYPE)
         self.title_label.grid(row=0, column=0, columnspan=2, padx=10, pady=10)
         
-        self.rest_button = ctk.CTkButton(self, text='Reset', font=FONT_TYPE,
-                                         command=self.reset_triger)
-        self.rest_button.grid(row=1, column=0, padx=10, pady=10)
+        self.reset_button = ctk.CTkButton(self, text='Reset', font=FONT_TYPE,
+                                         command=self.reset_button_callback)
+        self.reset_button.grid(row=1, column=0, padx=10, pady=10)
 
-    def reset_triger(self):
+    def reset_button_callback(self):
         # MainFrameWidgetのbuttonsとimage_labelを取得してWindowStateMonitorに渡す
         if self.main_frame_widget:
             buttons = self.main_frame_widget.buttons
@@ -40,16 +40,15 @@ class MainFrameWidget(ctk.CTkFrame):
         for i in range(3):
             if i != 1:
                 for j in range(10):
-                    button = ctk.CTkButton(self, text=f'Button {j}', command=lambda row=i, col=j: self.on_button_click((row, col)), font=FONT_TYPE)
+                    button = ctk.CTkButton(self, text=f'Button{j} - {i}', command=lambda row=j, col=i: self.on_button_click((row, col)), font=FONT_TYPE)
                     button.grid(row=j, column=i+1, padx=20, pady=10)
-                    self.buttons[(i, j)] = button
+                    self.buttons[(j,i)] = button
 
         self.image = ctk.CTkImage(light_image=Image.open(r'KUROHIGE-Toy/images/safe.png'), size=(500, 500))
         self.image_label = ctk.CTkLabel(self, image=self.image, text="")
         self.image_label.grid(row=0, column=2, padx=10, pady=10, rowspan=10)
 
         self.window_state_monitor = wsm.WindowStateMonitor(self.buttons, self.image_label)
-        self.window_state_monitor.reset_triger()
 
     def on_button_click(self, button_id):
         self.window_state_monitor.button_state(button_id)
