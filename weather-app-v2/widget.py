@@ -1,5 +1,6 @@
 import customtkinter as ctk
 import json
+from weather import get_weather
 
 FONT_TYPE = ('Meiryo', 12)
 FONT_TYPE_TITLE = ('Meiryo', 18)
@@ -35,7 +36,7 @@ class WidgetFrame(ctk.CTkFrame):
         self.result_label_date.grid(row=1, column=1, padx=20, pady=10)
         
         # 日付の結果
-        self.result_date = ctk.CTkLabel(self, text="2/7", font=FONT_TYPE_LABEL)
+        self.result_date = ctk.CTkLabel(self, text="", font=FONT_TYPE_LABEL)
         self.result_date.grid(row=2, column=2, padx=20, pady=10)
 
         # 場所のラベル
@@ -43,7 +44,7 @@ class WidgetFrame(ctk.CTkFrame):
         self.result_label_location.grid(row=3, column=1, padx=20, pady=10)
 
         # 場所の結果
-        self.result_location = ctk.CTkLabel(self, text="東京", font=FONT_TYPE_LABEL)
+        self.result_location = ctk.CTkLabel(self, text="", font=FONT_TYPE_LABEL)
         self.result_location.grid(row=4, column=2, padx=20, pady=10)
 
         # 天気のラベル
@@ -51,7 +52,7 @@ class WidgetFrame(ctk.CTkFrame):
         self.result_label_weather.grid(row=5, column=1, padx=20, pady=10)
         
         # 天気の結果
-        self.result_weather = ctk.CTkLabel(self, text="晴れ", font=FONT_TYPE_LABEL)
+        self.result_weather = ctk.CTkLabel(self, text="", font=FONT_TYPE_LABEL)
         self.result_weather.grid(row=6, column=2, padx=20, pady=10)
 
         # 文章のラベル
@@ -59,7 +60,7 @@ class WidgetFrame(ctk.CTkFrame):
         self.result_label_sentence.grid(row=7, column=1, padx=20, pady=10)
 
         # 文章の結果
-        self.result_sentence = ctk.CTkLabel(self, text="明日は晴れです", font=FONT_TYPE_LABEL)
+        self.result_sentence = ctk.CTkLabel(self, text="", font=FONT_TYPE_LABEL)
         self.result_sentence.grid(row=8, column=2, padx=20, pady=10)
 
     def region_combobox_click(self, value):
@@ -71,6 +72,16 @@ class WidgetFrame(ctk.CTkFrame):
         # 選択された県のエリア番号を表示
         for region, sub_areas in self.areas.items():
             if value in sub_areas:
-                area_code = sub_areas[value]
-                print(f"選択された県は{value}です。エリア番号は{area_code}です。")
+                self.selected_area_code = sub_areas[value]
                 break
+        self.search_weather()
+        
+    def search_weather(self):
+        # 天気予報APIを呼び出してデータを取得
+        weather_sentence, date, location, weather = get_weather(self.selected_area_code)
+
+        # データを表示
+        self.result_date.configure(text=date)
+        self.result_location.configure(text=location)
+        self.result_weather.configure(text=weather)
+        self.result_sentence.configure(text=weather_sentence)
