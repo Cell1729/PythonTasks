@@ -415,26 +415,26 @@ class Weather:
 
 黒ひげ危機一髪を作ろう
 
-## 5-1, 要件
+### 5-1, 要件
 
 - [customtkinter](https://customtkinter.tomschimansky.com/)を使って簡易的な黒ひげ危機一髪を作る
 - リセットボタンを配置してはずれの位置をリセットする
 - 画面のはずれを引いたときの演出を作成
 
-## 5-2, 使用ライブラリ
+### 5-2, 使用ライブラリ
 
 - [customtkinter](https://customtkinter.tomschimansky.com/)
 - Pillow
 
-## 5-3, ヒント
+### 5-3, ヒント
 
-### 5-3-1, ポイント
+#### 5-3-1, ポイント
 
 - UIの配置を決める
 - リセット機構を決める
 - ボタンをどのように管理するか
 
-### 5-3-2, コード一部分
+#### 5-3-2, コード一部分
 
 ボタンをIDで管理する方法
 
@@ -452,3 +452,35 @@ class Weather:
 
 実行結果
 ![sample button](images\KURHIGE-Button.png)
+
+## Task 6
+
+Djangoを使ってSNSを作ってみよう
+
+### 要件
+
+- ユーザー登録 / ログイン機能を持ったSNS
+- グループチャットが出来るようなSNS
+
+### Djangoの始め方
+
+プロジェクトの作り方
+
+```bash
+django-admin startproject プロジェクト名
+```
+
+djangoアプリの作り方
+> アプリについて
+> ユーザーを登録する/ユーザーをログインするアプリ
+> チャット部分など
+
+```bash
+python manage.py startapp アプリ名
+```
+
+djangoの開発サーバーの起動
+
+```bash
+python manage.py runserver
+```
