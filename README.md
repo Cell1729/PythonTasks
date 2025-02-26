@@ -456,13 +456,14 @@ class Weather:
 ## Task 6
 
 Djangoを使ってSNSを作ってみよう
+[リポジトリ](https://github.com/Cell1729/chatSNS)
 
-### 要件
+### 6-1, 要件
 
 - ユーザー登録 / ログイン機能を持ったSNS
 - グループチャットが出来るようなSNS
 
-### Djangoの始め方
+### 6-2, Djangoの始め方
 
 プロジェクトの作り方
 
@@ -473,7 +474,7 @@ django-admin startproject プロジェクト名
 djangoアプリの作り方
 > アプリについて
 > ユーザーを登録する/ユーザーをログインするアプリ
-> チャット部分など
+> チャット部分など分割してプロジェクトを作る
 
 ```bash
 python manage.py startapp アプリ名
@@ -483,4 +484,35 @@ djangoの開発サーバーの起動
 
 ```bash
 python manage.py runserver
+```
+
+### 6-3, 開発ポイント
+
+#### 6-3-1, ディレクトリの階層
+
+```text
+.
+├── chatSNS/
+│   ├── __init__.py ... djangoを起動したときの初期化ファイル
+│   ├── asgi.py ... サーバーに置くときに必要なファイル
+│   ├── settings.py ... djangoの設定ファイル
+│   ├── urls.py ... urlをまとめるファイル
+│   └── wsgi.py ... サーバーに置くときに必要なファイル
+├── users ... ユーザーのログイン/ログアウト、登録機能/
+│   ├── __init__.py ... 初期化ファイル
+│   ├── admin.py ... 管理ファイル
+│   ├── apps.py ... アプリケーションとして成立させるファイル
+│   ├── models.py ... データベースの構造を決定するファイル
+│   ├── tests.py ... テストプログラムを記述するファイル
+│   └── views.py ... 表示する機能を記述するファイル
+├── chat/
+│   ├── __init__.py
+│   ├── admin.py
+│   ├── apps.py
+│   ├── models.py
+│   ├── tests.py
+│   └── views.py
+├── manage.py ... Djangoの起動ファイル
+├── db.sqlite3 ... データベース
+└── etc...
 ```
