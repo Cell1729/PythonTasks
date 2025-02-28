@@ -458,6 +458,18 @@ class Weather:
 Djangoを使ってSNSを作ってみよう
 [リポジトリ](https://github.com/Cell1729/chatSNS)
 
+- サインアップ機能
+
+![signup](images\Chat-signup.png)
+
+- ログイン機能
+
+![login](images\Chat-login.png)
+
+- Chat room機能
+
+![chatroom](images\Chat-chatroom.png)
+
 ### 6-1, 要件
 
 - ユーザー登録 / ログイン機能を持ったSNS
@@ -486,33 +498,421 @@ djangoの開発サーバーの起動
 python manage.py runserver
 ```
 
-### 6-3, 開発ポイント
+### 6-3, Djangoの練習
 
-#### 6-3-1, ディレクトリの階層
+#### 6-3-1, Djangoの基礎
+
+練習用のdjangoアプリを作成して```views.py```、```models.py```に色々書いて記述してみよう
+
+```bash
+python manage.py startapp practice-django
+```
+
+#### 6-3-2, staticファイルについて
+
+今回はここがメインでは無いのでchatGPTを使って作成
+
+### 6-4, 開発ポイント
+
+#### 6-4-1, ヒント
+
+- リアルタイムでチャット更新するためにはwebsocketという方法を使う
+- 今回はリアルタイムでチャットを反映するためmanage.pyを使った起動だと非同期処理が出来ない
+
+#### 6-4-2, ディレクトリの階層
 
 ```text
 .
 ├── chatSNS/
 │   ├── __init__.py ... djangoを起動したときの初期化ファイル
-│   ├── asgi.py ... サーバーに置くときに必要なファイル
+│   ├── asgi.py ... 非同期通信を行う (Asynchronous Server GateWay)
 │   ├── settings.py ... djangoの設定ファイル
-│   ├── urls.py ... urlをまとめるファイル
-│   └── wsgi.py ... サーバーに置くときに必要なファイル
-├── users ... ユーザーのログイン/ログアウト、登録機能/
+│   ├── urls.py ... アプリのurlをまとめるファイル
+│   └── wsgi.py ... サーバーに置くときに必要なファイル (Web Server Gateway Interface)
+├── users/ ... ログイン/ログアウト、サインアップを作成するアプリ/
+│   ├── templates/
+│   │   └── html files ... htmlファイルを配置
 │   ├── __init__.py ... 初期化ファイル
-│   ├── admin.py ... 管理ファイル
+│   ├── admin.py ... 管理者画面で作成するファイル
 │   ├── apps.py ... アプリケーションとして成立させるファイル
-│   ├── models.py ... データベースの構造を決定するファイル
-│   ├── tests.py ... テストプログラムを記述するファイル
-│   └── views.py ... 表示する機能を記述するファイル
+│   ├── models.py ... データベース用のファイル
+│   ├── tests.py ... testコードを実行するファイル
+│   ├── views.py ... 表示を伴うファイル
+│   ├── forms.py ... フォームを定義するファイル
+│   └── urls.py ... アプリ内のurlをまとめるファイル
 ├── chat/
+│   ├── templates/
+│   │   └── html files
 │   ├── __init__.py
 │   ├── admin.py
 │   ├── apps.py
 │   ├── models.py
 │   ├── tests.py
-│   └── views.py
-├── manage.py ... Djangoの起動ファイル
-├── db.sqlite3 ... データベース
+│   ├── views.py
+│   ├── consumers.py ... webscoketを処理するファイル
+│   └── routing.py ... websocketをルーティングするファイル
+├── static/
+│   └── css ... htmlに色を付けるファイル
+├── manage.py ... djangoの起動ファイル
+├── db.sqlte3 ... データベース
 └── etc...
+```
+
+#### 6-4-3, 画面部分のコード
+
+(これらのコードを改造して使ってもいいかも)
+singup.html
+
+```html
+<html>
+<head>
+    <title>Sign Up</title>
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'users/css/style.css' %}">
+</head>
+<body>
+    <div class="login-container">
+        <h2>Sign Up</h2>
+        <form method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                {{ form.username.label_tag }}
+                {{ form.username }}
+            </div>
+            <div class="form-group">
+                {{ form.password1.label_tag }}
+                {{ form.password1 }}
+            </div>
+            <div class="form-group">
+                {{ form.password2.label_tag }}
+                {{ form.password2 }}
+            </div>
+            <button type="submit">Sign Up</button>
+        </form>
+        <a href="{% url 'login' %}">Login</a>
+    </div>
+</body>
+</html>
+```
+
+login.html
+
+```html
+<!DOCTYPE html>
+<html>
+<head>
+    {% load static %}
+    <title>Login</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'users/css/style.css' %}">
+</head>
+<body>
+    <div class="login-container">
+        <h2>Login</h2>
+        <form method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                {{ form.username.label_tag }}
+                {{ form.username }}
+            </div>
+            <div class="form-group">
+                {{ form.password.label_tag }}
+                {{ form.password }}
+            </div>
+            <button type="submit">Login</button>
+        </form>
+        <a href="{% url 'signup' %}">Sign Up</a>
+    </div>
+</body>
+</html>
+```
+
+style.css
+
+```css
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+/* login-containerは少し修正が必要かも */
+.login-container {
+    background-color: #fff;
+    padding: 50px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 300px;
+    text-align: center;
+}
+
+.login-container h2 {
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.form-group {
+    margin-bottom: 15px;
+    text-align: left;
+}
+
+.login-container input[type="text"],
+.login-container input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    display: block;
+    margin: 5px 0;
+}
+
+.login-container button {
+    width: 100%;
+    padding: 10px;
+    background-color: #007bff;
+    border: none;
+    border-radius: 4px;
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+    display: block;
+    margin: 10px 0;
+}
+
+.login-container button:hover {
+    background-color: #0056b3;
+}
+
+.login-container a {
+    display: block;
+    margin-top: 10px;
+    color: #007bff;
+    text-decoration: none;
+}
+
+.login-container a:hover {
+    text-decoration: underline;
+}
+```
+
+chat.html
+> 今回のjavascriptはwebsocketを使っているからそれなりに知識が必要
+
+```html
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Chat</title>
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'chat/css/chat_style.css' %}">
+</head>
+<body>
+    <div class="chat-container">
+        <h2>Chat Room</h2>
+        <div class="messages" id="chat-log">
+            {% for message in messages %}
+                <div class="message">
+                    <strong>{{ message.user.username }}:</strong> {{ message.content }}
+                </div>
+            {% endfor %}
+        </div>
+        <form id="chat-form" required>
+            {% csrf_token %}
+            <textarea id="chat-message-input" name="message" rows="3" placeholder="Type your message here..."></textarea>
+            <button type="submit">Send</button>
+        </form>
+    </div>
+    <form id="logout-form" action="{% url 'logout' %}" method="post" class="logout-form">
+        {% csrf_token %}
+        <button type="submit" class="logout-button">Logout</button>
+    </form>
+    <script>
+        const chatSocket = new WebSocket(
+            'ws://' + window.location.host + '/ws/chat/'
+        );
+
+        chatSocket.onmessage = function(e) {
+            const data = JSON.parse(e.data);
+            const chatLog = document.querySelector('#chat-log');
+            chatLog.innerHTML += ('<div class="message"><strong>' + data.username + ':</strong> ' + data.message + '</div>');
+            chatLog.scrollTop = chatLog.scrollHeight;
+        };
+
+        chatSocket.onclose = function(e) {
+            console.error('Chat socket closed unexpectedly');
+        };
+
+        document.querySelector('#chat-form').onsubmit = function(e) {
+            e.preventDefault();
+            const messageInputDom = document.querySelector('#chat-message-input');
+            const message = messageInputDom.value.trim();
+            if (message) {
+                chatSocket.send(JSON.stringify({
+                    'message': message
+                }));
+                messageInputDom.value = '';
+            }
+        };
+
+        // ページ読み込み時に自動スクロール
+        window.onload = function() {
+            const chatLog = document.querySelector('#chat-log');
+            chatLog.scrollTop = chatLog.scrollHeight;
+        };
+    </script>
+</body>
+</html>
+```
+
+chat_style.css
+
+```css
+.chat-container {
+    width: 70%;
+    margin: 20px auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    background-color: #f9f9f9;
+}
+
+.messages {
+    height: 600px; /* 高さを広くする */
+    overflow-y: scroll;
+    border-bottom: 1px solid #ccc;
+    margin-bottom: 10px;
+}
+
+.message {
+    padding: 5px;
+    border-bottom: 1px solid #eee;
+}
+
+form {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+textarea {
+    resize: none;
+    padding: 10px;
+    margin-right: 10px;
+    height: 50px; /* 縦に小さくする */
+    flex-grow: 1;
+}
+
+button {
+    padding: 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+.logout-button {
+    background-color: #dc3545;
+}
+
+.logout-button:hover {
+    background-color: #c82333;
+}
+
+.logout-form {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+}
+```
+
+#### 6-4-2, バックエンド
+
+- userの登録/ログイン/ログアウトはdjangoの機能として存在
+
+> ログインしないと見えないようにするには下記の**デコレーター**を使う
+
+```python
+@login_required
+def example():
+```
+
+routing.py
+
+```python
+from django.urls import path
+from . import consumers
+
+websocket_urlpatterns = [
+    path('ws/chat/', consumers.ChatConsumer.as_asgi()),
+]
+```
+
+consumers.py
+
+```python
+import json
+from channels.generic.websocket import AsyncWebsocketConsumer
+from django.contrib.auth.models import User
+from asgiref.sync import sync_to_async
+
+class ChatConsumer(AsyncWebsocketConsumer):
+    async def connect(self):
+        self.room_name = 'chatroom'
+        self.room_group_name = 'chat_%s' % self.room_name
+
+        # Join room group
+        await self.channel_layer.group_add(
+            self.room_group_name,
+            self.channel_name
+        )
+
+        await self.accept()
+
+    async def disconnect(self, close_code):
+        # Leave room group
+        await self.channel_layer.group_discard(
+            self.room_group_name,
+            self.channel_name
+        )
+
+    async def receive(self, text_data):
+        text_data_json = json.loads(text_data)
+        message = text_data_json['message']
+        username = self.scope["user"].username
+
+        # Save message to database
+        user = await sync_to_async(User.objects.get)(username=username)
+        # データベースにメッセージを保存する。
+        # djangoの設定が全て読み込めている状態でデータベースにアクセスし、エラーを避ける
+        from .models import Message
+        await sync_to_async(Message.objects.create)(user=user, content=message)
+
+        # Send message to room group
+        await self.channel_layer.group_send(
+            self.room_group_name,
+            {
+                'type': 'chat_message',
+                'message': message,
+                'username': username
+            }
+        )
+
+    async def chat_message(self, event):
+        message = event['message']
+        username = event['username']
+
+        # Send message to WebSocket
+        await self.send(text_data=json.dumps({
+            'message': message,
+            'username': username
+        }))
 ```
