@@ -460,15 +460,15 @@ Djangoを使ってSNSを作ってみよう
 
 - サインアップ機能
 
-![signup](images\Chat-signup.png)
+![signup](images/Chat-signup.png)
 
 - ログイン機能
 
-![login](images\Chat-login.png)
+![login](images/Chat-login.png)
 
 - Chat room機能
 
-![chatroom](images\Chat-chatroom.png)
+![chatroom](images/Chat-chatroom.png)
 
 ### 6-1, 要件
 
